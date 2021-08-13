@@ -12,7 +12,7 @@
     <color name="primary_text_color">#212121</color>
     <color name="secondary_text_color">#9AA2AF</color>
     <color name="white_color">#FFFFFF</color>
-    <color name="button_background_color">#63ace5</color>
-    <!--#fe9c8f • #feb2a8 • #fec8c1 • #fad9c1 • #f9caa7 -->
+    <color name="button_background_color">#fe9c8f </color>
+    <!--#fe9c8f • #feb2a8 • #fec8c1 • #fad9c1 • #f9caa7 #63ace5 -->
 </resources>
 
