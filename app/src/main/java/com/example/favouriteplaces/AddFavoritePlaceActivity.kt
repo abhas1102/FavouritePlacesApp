@@ -1,9 +1,11 @@
 package com.example.favouriteplaces
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.activity_add_favorite_place.*
 import java.text.SimpleDateFormat
@@ -31,6 +33,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         et_date.setOnClickListener(this)
+        tv_add_image.setOnClickListener(this)
 
 
     }
@@ -40,7 +43,28 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
             R.id.et_date -> {
                 DatePickerDialog(this@AddFavoritePlaceActivity,dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
             }
+
+            R.id.iv_place_image ->{
+                val picktureDialog = AlertDialog.Builder(this) // Using builder as context this to build Alert Dialog
+                picktureDialog.setTitle("Select Action")
+                val pictureDialogItems = arrayOf("Select Photo from Gallery","Capture photo from Camera")
+                picktureDialog.setItems(pictureDialogItems){ //Using picture dialog to set it's items
+                    dialog, which ->    // Defining some action depending on dialog which is selected
+                    when(which){
+                        0 -> choosePhotoFromGallery()
+                        1 -> Toast.makeText(this@AddFavoritePlaceActivity,"Camera selction coming soon",
+                    Toast.LENGTH_SHORT).show()
+                    }
+                }
+                picktureDialog.show() //Showing the dialogue
+            }
+
+
         }
+    }
+
+    private fun choosePhotoFromGallery(){
+
     }
 
     private fun updateDateInView(){
