@@ -65,8 +65,8 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                     dialog, which ->    // Defining some action depending on dialog which is selected
                     when (which) {
                         0 -> choosePhotoFromGallery()
-                        1 -> Toast.makeText(this@AddFavoritePlaceActivity, "Camera selction coming soon",
-                                Toast.LENGTH_SHORT).show()
+                        1 -> takePhotoFromCamera() /*Toast.makeText(this@AddFavoritePlaceActivity, "Camera selction coming soon",
+                                Toast.LENGTH_SHORT).show()*/
                     }
                 }
                 picktureDialog.show() //Showing the dialogue
@@ -92,6 +92,33 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    private fun takePhotoFromCamera(){
+
+        Dexter.withActivity(this).withPermissions(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+
+        ).withListener(object: MultiplePermissionsListener{
+            override fun onPermissionsChecked(report: MultiplePermissionsReport?){
+                if (report!!.areAllPermissionsGranted()){
+                    //  Toast.makeText(this@AddFavoritePlaceActivity,"Storage Read Write Permission Granted",
+                    //  Toast.LENGTH_SHORT).show()
+
+                    val galleryIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(galleryIntent,CAMERA)
+
+                }
+
+            }
+
+            override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>, token: PermissionToken) { // To show user why it is needed
+                showRationalDialogForPermissions()
+            }
+        }).onSameThread().check()
+
     }
 
     private fun choosePhotoFromGallery(){
@@ -145,6 +172,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object{
         private const val GALLERY = 1
+        private const val CAMERA = 2
     }
 }
 
