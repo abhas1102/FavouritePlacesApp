@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -90,6 +91,9 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                         Toast.makeText(this@AddFavoritePlaceActivity,"Failed to load the image", Toast.LENGTH_SHORT).show()
                     }
                 }
+            } else if (requestCode == CAMERA){
+                val thumbnail : Bitmap = data!!.extras!!.get("data") as Bitmap // Getting data from function parameter and transforming it in a Bitmap format
+                iv_place_image.setImageBitmap(thumbnail)
             }
         }
     }
