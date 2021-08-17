@@ -19,6 +19,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.SettingsClickListener
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_add_favorite_place.*
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -83,6 +84,10 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                     val contentURI = data.data
                     try {
                         val selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,contentURI)
+                        iv_place_image.setImageBitmap(selectedImageBitmap)
+                    }catch (e:IOException){
+                        e.printStackTrace()
+                        Toast.makeText(this@AddFavoritePlaceActivity,"Failed to load the image", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
