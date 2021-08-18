@@ -23,7 +23,9 @@ import com.karumi.dexter.listener.SettingsClickListener
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_add_favorite_place.*
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -182,7 +184,16 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
         var file = wrapper.getDir(IMAGE_DIRECTORY,Context.MODE_PRIVATE) // In order to get the directory we need context wrapper. It has specific places in phone to store data
         file = File(file,"${UUID.randomUUID()}.jpg")
 
+        try {
+            val stream : OutputStream = FileOutputStream(file) // Creating Output stream of file which contains image
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream) // Compressing the bitmap in jpeg format
+            stream.flush()
+            stream.close()
+        }catch (e:IOException){
+            e.printStackTrace()
+        }
 
+    return Uri.parse(file.absolutePath) // parsing the file path into Uri
 
     }
 
