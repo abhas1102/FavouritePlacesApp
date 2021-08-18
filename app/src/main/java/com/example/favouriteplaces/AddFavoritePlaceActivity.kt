@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -20,6 +22,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.SettingsClickListener
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_add_favorite_place.*
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -174,9 +177,19 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
         et_date.setText(sdf.format(cal.time).toString())
     }
 
+    private fun saveImageToInternalStorage(bitmap: Bitmap):Uri{ // It will return the location of where image is stored
+        val wrapper = ContextWrapper(applicationContext) // Context wrapper extends Context and we can use application context
+        var file = wrapper.getDir(IMAGE_DIRECTORY,Context.MODE_PRIVATE) // In order to get the directory we need context wrapper. It has specific places in phone to store data
+        file = File(file,"${UUID.randomUUID()}.jpg")
+
+
+
+    }
+
     companion object{
         private const val GALLERY = 1
         private const val CAMERA = 2
+        private const val IMAGE_DIRECTORY = "FavoritePlacesImages"
     }
 }
 
