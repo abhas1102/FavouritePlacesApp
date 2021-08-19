@@ -1,4 +1,4 @@
-package com.example.favouriteplaces
+package com.example.favouriteplaces.activities
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -16,11 +16,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.favouriteplaces.R
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.SettingsClickListener
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_add_favorite_place.*
 import java.io.File
@@ -123,7 +123,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                     //  Toast.LENGTH_SHORT).show()
 
                     val galleryIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    startActivityForResult(galleryIntent,CAMERA)
+                    startActivityForResult(galleryIntent, CAMERA)
 
                 }
 
@@ -148,7 +148,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
               //  Toast.LENGTH_SHORT).show()
 
                 val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(galleryIntent,GALLERY)
+                startActivityForResult(galleryIntent, GALLERY)
 
             }
 
