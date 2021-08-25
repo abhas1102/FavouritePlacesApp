@@ -2,7 +2,9 @@ package com.example.favouriteplaces.database
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.favouriteplaces.models.FavoritePlaceModel
 
@@ -71,5 +73,38 @@ class DatabaseHandler(context: Context):SQLiteOpenHelper(context,DATABASE_NAME,n
 
         db.close() // Closing database connection
         return result
+    }
+
+    fun getFavoritePlacesList():ArrayList<FavoritePlaceModel>{
+        val favoritePlaceList = ArrayList<FavoritePlaceModel>()
+        val selectQuery = "SELECT * FROM $TABLE_FAVORITE_PLACE"
+        val db = this.readableDatabase
+
+        try {
+            val cursor : Cursor = db.rawQuery(selectQuery,null)
+            if (cursor.moveToFirst()){
+                do {
+                    val place = FavoritePlaceModel(
+                            cursor.getInt(cursor.getColumnIndex(KEY_ID)),
+                            cursor.getString(cursor.getColumnIndex(KEY_TITLE)),
+                            cursor.getString(cursor.getColumnIndex(KEY_IMAGE)),
+                            cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)),
+                            cursor.getString(cursor.getColumnIndex(KEY_DATE)),
+                            cursor.getString(cursor.getColumnIndex(KEY_LOCATION)),
+                            cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)),
+                            cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)),
+
+                    )
+                    favoritePlaceList.add(place)
+                }while (cursor.moveToNext())
+            }
+            cursor.close()
+
+        }catch (e:SQLiteException){
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+        return favoritePlaceList
+
     }
 }
