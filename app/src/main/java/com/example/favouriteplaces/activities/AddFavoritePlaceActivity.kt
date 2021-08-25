@@ -52,6 +52,8 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
             updateDateInView()
         }
 
+        updateDateInView() // It automatically populates the date when screen opens
+
         et_date.setOnClickListener(this)
         tv_add_image.setOnClickListener(this)
 
@@ -77,6 +79,26 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
                 picktureDialog.show() //Showing the dialogue
+            }
+
+            R.id.btn_save ->{
+
+                when{
+
+                    et_title.text.isNullOrEmpty() -> {
+                        Toast.makeText(this,"please enter title",Toast.LENGTH_SHORT).show()
+                    }
+
+                    et_description.text.isNullOrEmpty() -> {
+                        Toast.makeText(this,"please enter title",Toast.LENGTH_SHORT).show()
+                    }
+
+                    et_location.text.isNullOrEmpty() -> {
+                        Toast.makeText(this,"please enter title",Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
             }
 
 
