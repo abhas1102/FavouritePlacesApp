@@ -17,6 +17,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.favouriteplaces.R
+import com.example.favouriteplaces.database.DatabaseHandler
+import com.example.favouriteplaces.models.FavoritePlaceModel
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -34,6 +36,10 @@ import java.util.*
 class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     private var cal = Calendar.getInstance()
+    private var saveImageToInternalStorage: Uri? = null
+
+    private var mLatitude: Double = 0.0 // A variable which will hold the latitude value.
+    private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
     private lateinit var dateSetListener:DatePickerDialog.OnDateSetListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +62,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
 
         et_date.setOnClickListener(this)
         tv_add_image.setOnClickListener(this)
+        btn_save.setOnClickListener(this)
 
 
     }
@@ -97,6 +104,28 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                         Toast.makeText(this,"please enter title",Toast.LENGTH_SHORT).show()
                     }
 
+                    saveImageToInternalStorage == null ->{
+                        Toast.makeText(this,"please seleect an image", Toast.LENGTH_SHORT).show()
+                    } else ->{
+                        val favoritePlaceModel = FavoritePlaceModel(
+                                0,et_title.text.toString(),
+                                saveImageToInternalStorage.toString(),
+                                et_description.text.toString(),
+                                et_date.text.toString(),
+                                et_location.text.toString(),
+                                mLatitude,
+                                mLongitude
+                        )
+
+                    val dbHandler = DatabaseHandler(this)
+                    val addFavoritePlace = dbHandler.addHappyPlace(favoritePlaceModel)
+
+                    if (addFavoritePlace>0){
+                        Toast.makeText(this,"The Favorite Place details are inserted successfully", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    }
+
                 }
 
             }
@@ -113,7 +142,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                     val contentURI = data.data
                     try {
                         val selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,contentURI)
-                        val saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
+                         saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
                         Log.e("Saved Image: ", "Path :: $saveImageToInternalStorage")
 
                         iv_place_image.setImageBitmap(selectedImageBitmap)
