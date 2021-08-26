@@ -14,5 +14,8 @@
     <color name="white_color">#FFFFFF</color>
     <color name="button_background_color">#fe9c8f </color>
     <!--#fe9c8f • #feb2a8 • #fec8c1 • #fad9c1 • #f9caa7 #63ace5 -->
+
+    <color name="circular_image_border_color">#757575</color>
+    <color name="item_favorite_place_description_text_color">#606060</color>
 </resources>
 
