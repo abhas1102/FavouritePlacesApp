@@ -121,7 +121,9 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                     val addFavoritePlace = dbHandler.addHappyPlace(favoritePlaceModel)
 
                     if (addFavoritePlace>0){
-                        Toast.makeText(this,"The Favorite Place details are inserted successfully", Toast.LENGTH_SHORT).show()
+                       // Toast.makeText(this,"The Favorite Place details are inserted successfully", Toast.LENGTH_SHORT).show()
+
+                           setResult(Activity.RESULT_OK)
                         finish()
                     }
                     }

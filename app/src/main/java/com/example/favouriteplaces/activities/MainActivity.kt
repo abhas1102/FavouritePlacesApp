@@ -1,5 +1,6 @@
 package com.example.favouriteplaces.activities
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         fabAddHappyPlace.setOnClickListener{
             val intent = Intent(this, AddFavoritePlaceActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, ADD_PLACE_ACTIVITY_REQUEST_CODE)
         }
         getFavoritePlacesListFromLocalDB()
     }
@@ -47,5 +48,20 @@ class MainActivity : AppCompatActivity() {
             rv_favorite_places_list.visibility = View.GONE
             tv_no_records_available.visibility = View.VISIBLE
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_PLACE_ACTIVITY_REQUEST_CODE){
+            if (resultCode == Activity.RESULT_OK){
+                getFavoritePlacesListFromLocalDB()
+            }else{
+                Log.e("Activity","Cancelled or Backpressed")
+            }
+        }
+    }
+
+    companion object{
+        var ADD_PLACE_ACTIVITY_REQUEST_CODE = 1
     }
 }
