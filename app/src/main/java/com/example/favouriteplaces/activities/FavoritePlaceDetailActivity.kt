@@ -1,5 +1,6 @@
 package com.example.favouriteplaces.activities
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.favouriteplaces.R
@@ -21,6 +22,14 @@ class FavoritePlaceDetailActivity : AppCompatActivity() {
             setSupportActionBar(toolbar_favorite_place_detail)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.title = favoritePlaceDetailModel.title
+
+            toolbar_favorite_place_detail.setNavigationOnClickListener {
+                onBackPressed()
+            }
+
+            iv_place_image.setImageURI(Uri.parse(favoritePlaceDetailModel.image))
+            tv_description.text = favoritePlaceDetailModel.description
+            tv_location.text = favoritePlaceDetailModel.location
 
         }
     }
