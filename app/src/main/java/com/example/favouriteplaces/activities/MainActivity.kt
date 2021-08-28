@@ -30,6 +30,13 @@ class MainActivity : AppCompatActivity() {
         rv_favorite_places_list.setHasFixedSize(true)
         val placesAdapter = FavoritePlacesAdapter(this,favoritePlaceList)
         rv_favorite_places_list.adapter = placesAdapter
+
+        placesAdapter.setOnClickListener(object : FavoritePlacesAdapter.OnClickListener{
+            override fun onClick(position: Int, model: FavoritePlaceModel) {
+                val intent = Intent(this@MainActivity,FavoritePlaceDetailActivity::class.java)
+                startActivity(intent)
+            }
+        })
     }
 
     private fun getFavoritePlacesListFromLocalDB(){
