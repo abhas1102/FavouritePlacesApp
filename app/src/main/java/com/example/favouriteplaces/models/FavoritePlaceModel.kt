@@ -1,5 +1,7 @@
 package com.example.favouriteplaces.models
 
+import java.io.Serializable
+
 data class FavoritePlaceModel(
         val id:Int,
         val title:String,
@@ -9,4 +11,4 @@ data class FavoritePlaceModel(
         val location:String,
         val latitude:Double,
         val longitude:Double
-)
+) : Serializable
