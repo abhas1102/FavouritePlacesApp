@@ -19,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.favouriteplaces.R
 import com.example.favouriteplaces.database.DatabaseHandler
 import com.example.favouriteplaces.models.FavoritePlaceModel
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -29,6 +33,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,6 +56,10 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
             onBackPressed()
         }
 
+        if(!Places.isInitialized()){
+            Places.initialize(this@AddFavoritePlaceActivity,resources.getString(R.string.google_maps_api_key))
+        }
+
         dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, month)
@@ -63,6 +72,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
         et_date.setOnClickListener(this)
         tv_add_image.setOnClickListener(this)
         btn_save.setOnClickListener(this)
+        et_location.setOnClickListener(this)
 
 
     }
@@ -132,6 +142,17 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
 
             }
 
+            R.id.et_location ->{
+                try {
+                    val fields = listOf(Place.Field.ID,Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS)
+
+                    val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN,fields).build(this@AddFavoritePlaceActivity)
+                    startActivityForResult(intent, PLACE_AUTO_COMPLETE_REQUEST_CODE)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+            }
+
 
         }
     }
@@ -158,6 +179,11 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                 val saveImageToInternalStorage = saveImageToInternalStorage(thumbnail)
                 Log.e("Saved Image: ", "Path :: $saveImageToInternalStorage")
                 iv_place_image.setImageBitmap(thumbnail)
+            } else if (requestCode == PLACE_AUTO_COMPLETE_REQUEST_CODE){
+                val place:Place = Autocomplete.getPlaceFromIntent(data!!)
+                et_location.setText(place.address)
+                mLatitude = place.latLng!!.latitude
+                mLongitude = place.latLng!!.longitude
             }
         }
     }
@@ -260,6 +286,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
         private const val GALLERY = 1
         private const val CAMERA = 2
         private const val IMAGE_DIRECTORY = "FavoritePlacesImages"
+        private const val PLACE_AUTO_COMPLETE_REQUEST_CODE = 3
     }
 }
 
