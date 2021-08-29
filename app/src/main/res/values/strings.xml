@@ -9,5 +9,6 @@
     <string name="note_text_no_happy_places_found_yet">No Happy Places Found Yet. Kindly Add One</string>
 
     <string name="image_content_description">image</string>
+    <string name="google_maps_api_key">AIzaSyDrEXvXUsFNkaf-17mQGyUWICE9kUSpgEI</string>
 
 </resources>
