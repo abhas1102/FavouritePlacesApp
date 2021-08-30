@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.favouriteplaces.R
 import com.example.favouriteplaces.models.FavoritePlaceModel
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -41,5 +42,8 @@ class MapActivity : AppCompatActivity(),OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap) {
         val position = LatLng(mFavoritePlaceDetails!!.latitude,mFavoritePlaceDetails!!.longitude)
         p0.addMarker(MarkerOptions().position(position).title(mFavoritePlaceDetails!!.location))
+
+        val newLatLngZoom = CameraUpdateFactory.newLatLngZoom(position,15f)
+        p0.animateCamera(newLatLngZoom) // it will return camera update
     }
 }
