@@ -7,6 +7,8 @@ import com.example.favouriteplaces.models.FavoritePlaceModel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_map.*
 
 class MapActivity : AppCompatActivity(),OnMapReadyCallback {
@@ -37,6 +39,7 @@ class MapActivity : AppCompatActivity(),OnMapReadyCallback {
     }
 
     override fun onMapReady(p0: GoogleMap) {
-        TODO("Not yet implemented")
+        val position = LatLng(mFavoritePlaceDetails!!.latitude,mFavoritePlaceDetails!!.longitude)
+        p0.addMarker(MarkerOptions().position(position).title(mFavoritePlaceDetails!!.location))
     }
 }
