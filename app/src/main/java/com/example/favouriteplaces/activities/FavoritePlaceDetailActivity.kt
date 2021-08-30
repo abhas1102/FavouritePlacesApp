@@ -1,5 +1,6 @@
 package com.example.favouriteplaces.activities
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -30,6 +31,12 @@ class FavoritePlaceDetailActivity : AppCompatActivity() {
             iv_place_image.setImageURI(Uri.parse(favoritePlaceDetailModel.image))
             tv_description.text = favoritePlaceDetailModel.description
             tv_location.text = favoritePlaceDetailModel.location
+
+            btn_view_on_map.setOnClickListener {
+                val intent = Intent(this,MapActivity::class.java)
+                intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS,favoritePlaceDetailModel)
+                startActivity(intent)
+            }
 
         }
     }
