@@ -32,11 +32,7 @@ class FavoritePlaceDetailActivity : AppCompatActivity() {
             tv_description.text = favoritePlaceDetailModel.description
             tv_location.text = favoritePlaceDetailModel.location
 
-            btn_view_on_map.setOnClickListener {
-                val intent = Intent(this,MapActivity::class.java)
-                intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS,favoritePlaceDetailModel)
-                startActivity(intent)
-            }
+
 
         }
     }
