@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -36,6 +37,7 @@ import java.io.OutputStream
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.jar.Manifest
 
 
 class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
@@ -73,8 +75,14 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
         tv_add_image.setOnClickListener(this)
         btn_save.setOnClickListener(this)
         et_location.setOnClickListener(this)
+        tv_select_current_location.setOnClickListener(this)
 
 
+    }
+
+    private fun isLocationEnabled():Boolean{
+        val locationManager:LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager // Asking for location service
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
     override fun onClick(v: View?) {
@@ -151,6 +159,30 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                 }catch (e:Exception){
                     e.printStackTrace()
                 }
+            }
+
+            R.id.tv_select_current_location->{
+                    if (!isLocationEnabled()){
+                        Toast.makeText(this,"Your location provider is turned off",Toast.LENGTH_SHORT).show()
+                        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                        startActivity(intent)
+                    }else{
+                        Dexter.withActivity(this).withPermissions(
+                                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        ).withListener(object:MultiplePermissionsListener{
+                            override fun onPermissionsChecked(report: MultiplePermissionsReport?){
+                                if (report!!.areAllPermissionsGranted()){
+                                    Toast.makeText(this@AddFavoritePlaceActivity,"Location Permission is granted"
+                                    ,Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            override fun onPermissionRationaleShouldBeShown(p0: MutableList<PermissionRequest>?, p1: PermissionToken?) {
+                                showRationalDialogForPermissions()
+                            }
+                        }).onSameThread().check()
+                    }
             }
 
 
