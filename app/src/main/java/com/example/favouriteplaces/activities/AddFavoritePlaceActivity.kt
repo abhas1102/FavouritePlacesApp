@@ -1,5 +1,6 @@
 package com.example.favouriteplaces.activities
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -7,19 +8,24 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.example.favouriteplaces.R
 import com.example.favouriteplaces.database.DatabaseHandler
 import com.example.favouriteplaces.models.FavoritePlaceModel
+import com.google.android.gms.location.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -47,6 +53,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     private var mLatitude: Double = 0.0 // A variable which will hold the latitude value.
     private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
+    private lateinit var mFusedLocationClient:FusedLocationProviderClient
     private lateinit var dateSetListener:DatePickerDialog.OnDateSetListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +64,7 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
         toolbar_add_place.setNavigationOnClickListener {
             onBackPressed()
         }
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         if(!Places.isInitialized()){
             Places.initialize(this@AddFavoritePlaceActivity,resources.getString(R.string.google_maps_api_key))
@@ -83,6 +91,27 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
     private fun isLocationEnabled():Boolean{
         val locationManager:LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager // Asking for location service
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestNewLocationData(){
+        var mLocationRequest = LocationRequest()
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.interval = 1000
+        mLocationRequest.numUpdates = 1
+
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest,mLocationCallBack, Looper.myLooper())
+
+    }
+
+    private var mLocationCallBack = object :LocationCallback(){
+        override fun onLocationResult(p0: LocationResult?) {
+            val mLastLocation:Location = p0!!.lastLocation //p0 is location result
+           mLatitude= mLastLocation.latitude
+            Log.i("Current Latitude","$mLatitude")
+            mLongitude = mLastLocation.longitude
+            Log.i("Current Longitude","$mLongitude")
+        }
     }
 
     override fun onClick(v: View?) {
@@ -173,8 +202,9 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
                         ).withListener(object:MultiplePermissionsListener{
                             override fun onPermissionsChecked(report: MultiplePermissionsReport?){
                                 if (report!!.areAllPermissionsGranted()){
-                                    Toast.makeText(this@AddFavoritePlaceActivity,"Location Permission is granted"
-                                    ,Toast.LENGTH_SHORT).show()
+                                 /*   Toast.makeText(this@AddFavoritePlaceActivity,"Location Permission is granted"
+                                    ,Toast.LENGTH_SHORT).show() */
+                                    requestNewLocationData()
                                 }
                             }
 
