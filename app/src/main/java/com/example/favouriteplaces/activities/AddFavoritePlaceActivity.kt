@@ -25,6 +25,7 @@ import androidx.core.app.ActivityCompat
 import com.example.favouriteplaces.R
 import com.example.favouriteplaces.database.DatabaseHandler
 import com.example.favouriteplaces.models.FavoritePlaceModel
+import com.example.favouriteplaces.utils.GetAddressFromLatLng
 import com.google.android.gms.location.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -111,6 +112,9 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
             Log.i("Current Latitude","$mLatitude")
             mLongitude = mLastLocation.longitude
             Log.i("Current Longitude","$mLongitude")
+
+            val addressTask = GetAddressFromLatLng(this@AddFavoritePlaceActivity,mLatitude,mLongitude)
+            addressTask.setAddressListener(object :GetAddressFromLatLng.AddressListener)
         }
     }
 
