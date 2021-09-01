@@ -114,7 +114,15 @@ class AddFavoritePlaceActivity : AppCompatActivity(), View.OnClickListener {
             Log.i("Current Longitude","$mLongitude")
 
             val addressTask = GetAddressFromLatLng(this@AddFavoritePlaceActivity,mLatitude,mLongitude)
-            addressTask.setAddressListener(object :GetAddressFromLatLng.AddressListener)
+            addressTask.setAddressListener(object :GetAddressFromLatLng.AddressListener{
+                override fun onAddressFound(address:String?){
+                    et_location.setText(address)
+                }
+                override fun onError(){
+                    Log.e("Get Address","Something went wrong")
+                }
+            })
+            addressTask.getAddress()
         }
     }
 
